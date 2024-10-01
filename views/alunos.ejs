@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Alunos</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Gerenciamento de Alunos</h1>
+    <nav>
+        <a href="/">Início</a> | 
+        <a href="/alunos">Alunos</a> | 
+        <a href="/responsaveis">Responsáveis</a> | 
+        <a href="/projetos">Projetos</a> | 
+        <a href="/monitores">Monitores</a>
+    </nav>
+
+    <!-- Lista de Alunos -->
+    <div id="alunos-list">
+        <h2>Lista de Alunos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Sobrenome</th>
+                    <th>Telefone</th>
+                    <th>Gênero</th>
+                    <th>Etnia</th>
+                    <th>Data de Nascimento</th>
+                    <th>Responsáveis</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (alunos && alunos.length > 0) { %>
+                    <% alunos.forEach(aluno => { %>
+                        <tr>
+                            <td><%= aluno.nome %></td>
+                            <td><%= aluno.sobrenome %></td>
+                            <td><%= aluno.telefone %></td>
+                            <td><%= aluno.genero %></td>
+                            <td><%= aluno.etnia %></td>
+                            <td>
+                                <%= new Date(aluno.data_nascimento).toLocaleDateString('pt-BR', { timeZone: 'UTC' }) %>
+                            </td>
+                            <td>
+                                <% if (aluno.Responsavels && aluno.Responsavels.length > 0) { %>
+                                    <% aluno.Responsavels.forEach(responsavel => { %>
+                                        <span><%= responsavel.nome %> <%= responsavel.sobrenome %></span><br>
+                                    <% }) %>
+                                <% } else { %>
+                                    Nenhum responsável
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="7">Nenhum aluno encontrado.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Formulário de Cadastro de Aluno -->
+    <div id="add-aluno">
+        <h2>Adicionar Aluno</h2>
+        <form action="/alunos" method="POST">
+            <div>
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+            <div>
+                <label for="sobrenome">Sobrenome:</label>
+                <input type="text" id="sobrenome" name="sobrenome" required>
+            </div>
+            <div>
+                <label for="telefone">Telefone:</label>
+                <input type="text" id="telefone" name="telefone">
+            </div>
+            <div>
+                <label for="genero">Gênero:</label>
+                <select id="genero" name="genero">
+                    <option value="">Selecione</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Feminino">Feminino</option>
+                    <option value="Outro">Outro</option>
+                </select>
+            </div>
+            <div>
+                <label for="etnia">Etnia:</label>
+                <input type="text" id="etnia" name="etnia">
+            </div>
+            <div>
+                <label for="data_nascimento">Data de Nascimento:</label>
+                <input type="date" id="data_nascimento" name="data_nascimento" required>
+            </div>
+            <button type="submit">Adicionar Aluno</button>
+        </form>
+    </div>
+</body>
+</html>

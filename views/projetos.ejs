@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Projetos</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* CSS para tornar a tabela responsiva */
+        .table-responsive {
+            overflow-x: auto;
+            max-width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Ajustes para input e select no formulário */
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 100%;
+        }
+
+        form > div {
+            flex: 1 1 45%; /* Permitir que os itens ocupem até 45% da largura e se ajustem */
+        }
+
+        form input, form select, form textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        /* Ajustar para telas pequenas */
+        @media (max-width: 600px) {
+            form > div {
+                flex: 1 1 100%; /* Em telas menores, cada item ocupará 100% da largura */
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Gerenciamento de Projetos</h1>
+    <nav>
+        <a href="/">Início</a> | 
+        <a href="/alunos">Alunos</a> | 
+        <a href="/responsaveis">Responsáveis</a> | 
+        <a href="/projetos">Projetos</a> | 
+        <a href="/monitores">Monitores</a>
+    </nav>
+    
+    <div id="projetos-list" class="table-responsive">
+        <h2>Lista de Projetos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Data de Início</th>
+                    <th>Período</th>
+                    <th>Monitor</th>
+                    <th>Alunos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (projetos && projetos.length > 0) { %>
+                    <% projetos.forEach(projeto => { %>
+                        <tr>
+                            <td><%= projeto.nome %></td>
+                            <td><%= projeto.descricao %></td>
+                            <td><%= new Date(projeto.data_inicio).toLocaleDateString('pt-BR', { timeZone: 'UTC' }) %></td>
+                            <td><%= projeto.periodo %></td>
+                            <td><%= projeto.monitor ? projeto.monitor.nome : 'Nenhum' %></td>
+                            <td>
+                                <% if (projeto.Alunos && projeto.Alunos.length > 0) { %>
+                                    <% projeto.Alunos.forEach(aluno => { %>
+                                        <span><%= aluno.nome %> <%= aluno.sobrenome %></span><br>
+                                    <% }) %>
+                                <% } else { %>
+                                    Nenhum aluno
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="6">Nenhum projeto encontrado.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+    
+    <div id="add-projeto">
+        <h2>Adicionar Projeto</h2>
+        <form action="/projetos" method="POST">
+            <div>
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+            <div>
+                <label for="descricao">Descrição:</label>
+                <textarea id="descricao" name="descricao" required></textarea>
+            </div>
+            <div>
+                <label for="data_inicio">Data de Início:</label>
+                <input type="date" id="data_inicio" name="data_inicio" required>
+            </div>
+            <div>
+                <label for="periodo">Período:</label>
+                <select id="periodo" name="periodo" required>
+                    <option value="">Selecione</option>
+                    <option value="Manhã">Manhã</option>
+                    <option value="Tarde">Tarde</option>
+                    <option value="Noite">Noite</option>
+                </select>
+            </div>
+            <div>
+                <label for="monitor_id">Monitor:</label>
+                <select id="monitor_id" name="monitor_id">
+                    <option value="">Selecione um monitor</option>
+                    <% monitores.forEach(monitor => { %>
+                        <option value="<%= monitor.id %>"><%= monitor.nome %> <%= monitor.sobrenome %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <div>
+                <label for="alunos_ids">Alunos:</label>
+                <select id="alunos_ids" name="alunos_ids" multiple>
+                    <% alunos.forEach(aluno => { %>
+                        <option value="<%= aluno.id %>"><%= aluno.nome %> <%= aluno.sobrenome %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <button type="submit">Adicionar Projeto</button>
+        </form>
+    </div>
+</body>
+</html>

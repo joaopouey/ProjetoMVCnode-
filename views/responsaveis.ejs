@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Responsáveis</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Gerenciamento de Responsáveis</h1>
+    <nav>
+        <a href="/">Início</a> | 
+        <a href="/alunos">Alunos</a> | 
+        <a href="/responsaveis">Responsáveis</a> | 
+        <a href="/projetos">Projetos</a> | 
+        <a href="/monitores">Monitores</a>
+    </nav>
+    
+    <div id="responsaveis-list">
+        <h2>Lista de Responsáveis</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Sobrenome</th>
+                    <th>Parentesco</th>
+                    <th>Telefone</th>
+                    <th>ID do Aluno</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (responsaveis && responsaveis.length > 0) { %>
+                    <% responsaveis.forEach(responsavel => { %>
+                        <tr>
+                            <td><%= responsavel.nome %></td>
+                            <td><%= responsavel.sobrenome %></td>
+                            <td><%= responsavel.parentesco %></td>
+                            <td><%= responsavel.telefone %></td>
+                            <td><%= responsavel.aluno_id %></td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="5">Nenhum responsável encontrado.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+    
+    <div id="add-responsavel">
+        <h2>Adicionar Responsável</h2>
+        <form action="/responsaveis" method="POST">
+            <div>
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+            <div>
+                <label for="sobrenome">Sobrenome:</label>
+                <input type="text" id="sobrenome" name="sobrenome" required>
+            </div>
+            <div>
+                <label for="parentesco">Parentesco:</label>
+                <input type="text" id="parentesco" name="parentesco" required>
+            </div>
+            <div>
+                <label for="telefone">Telefone:</label>
+                <input type="text" id="telefone" name="telefone">
+            </div>
+            <div>
+                <label for="aluno_id">Aluno:</label>
+                <select id="aluno_id" name="aluno_id" required>
+                    <option value="">Selecione um aluno</option>
+                    <% alunos.forEach(aluno => { %>
+                        <option value="<%= aluno.id %>"><%= aluno.nome %> <%= aluno.sobrenome %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <button type="submit">Adicionar Responsável</button>
+        </form>
+    </div>
+</body>
+</html>
